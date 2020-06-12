@@ -18,12 +18,18 @@
     "test.watch": "NODE_ENV=test jest --watch"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.0",
+    "@babel/preset-env": "^7.8.0",
+    "@babel/preset-typescript": "^7.8.0",
     "@types/jest": "^24.0.25",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "bs-platform": "^7.0.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "gentype": "^3.12.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",

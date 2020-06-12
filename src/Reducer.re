@@ -1,53 +1,64 @@
 open Wonka;
 open Wonka_types;
 
-type state = {
-  name: string,
-  count: int,
-};
+type event('action) =
+  | Do('action)
+  | Await(sourceT('action));
 
-type action =
-  | IncrementCount
-  | DoubleCount
-  | SetCount(int);
+type reducer('state, 'action) = (. 'state, 'action) => 'state;
 
-type event =
-  | Do(action)
-  | Await(sourceT(action));
+type dispatch('state, 'action) = operatorT(event('action), 'state);
 
-let initialState = {name: "Test", count: 0};
-
-let handleEvents =
-  mergeMap((. event) =>
-    switch (event) {
-    | Do(action) => fromValue(action)
-    | Await(source) => source
-    }
+[@genType]
+let reduce =
+    (reducer: reducer('state, 'action), initialState)
+    : dispatch('state, 'action) =>
+  curry(source =>
+    source
+    |> mergeMap((. event) =>
+         switch (event) {
+         | Do(action) => fromValue(action)
+         | Await(source) => source
+         }
+       )
+    |> scan(reducer, initialState)
   );
 
-let handleActions = initialState =>
-  initialState
-  |> scan((. state, event) =>
-       switch (event) {
-       | IncrementCount => {...state, count: state.count + 1}
-       | DoubleCount => {...state, count: state.count * 2}
-       | SetCount(number) => {...state, count: number}
-       }
-     );
+[@genType]
+let toAction = action => Do(action);
 
-let reducer = initialState =>
-  curry(source => source |> handleEvents |> handleActions(initialState));
+[@genType]
+let makeAction = action => action |> toAction |> fromValue;
 
-let makeAction = action => fromValue(Do(action));
+[@genType]
+let toActions = actions => actions |> Js.Array.map(toAction);
 
-let makeAsyncAction = source => fromValue(Await(source));
+[@genType]
+let makeActions = actions => actions |> toActions |> fromArray;
 
-let updateCount = () =>
-  makeAsyncAction(
-    fromPromise(Js.Promise.resolve(100))
-    |> map((. count) => SetCount(count)),
-  );
+[@genType]
+let toAsyncAction = source => Await(source);
 
-let sync = makeAction(DoubleCount) |> reducer(initialState);
+[@genType]
+let makeAsyncAction = source => source |> toAsyncAction |> fromValue;
 
-let async = updateCount() |> reducer(initialState);
+[@genType]
+let toAsyncActions = sources => sources |> Js.Array.map(toAsyncAction);
+
+[@genType]
+let makeAsyncActions = sources => sources |> toAsyncActions |> fromArray;
+
+[@genType]
+let toPromiseAction = promise => Await(promise |> fromPromise);
+
+[@genType]
+let makePromiseAction = promise => promise |> toPromiseAction |> fromValue;
+
+[@genType]
+let toPromiseActions = promises => promises |> Js.Array.map(toPromiseAction);
+
+[@genType]
+let makePromiseActions = promises => promises |> toPromiseActions |> fromArray;
+
+[@genType]
+let default = reduce;
