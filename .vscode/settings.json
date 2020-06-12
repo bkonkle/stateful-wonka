@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "**/*.bs.js": true,
+    "**/*.gen.tsx": true
+  },
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true
+}

@@ -1,0 +1,37 @@
+{
+  "name": "stateful-wonka",
+  "version": "1.0.0",
+  "description": "State management based on Wonka streams",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bkonkle/stateful-wonka.git"
+  },
+  "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clean": "bsb -clean-world",
+    "build": "bsb -make-world",
+    "rei": "bin/rei",
+    "watch": "bsb -make-world -w",
+    "test": "NODE_ENV=test jest",
+    "test.watch": "NODE_ENV=test jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "bs-platform": "^7.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "gentype": "^3.12.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {
+    "wonka": "^4.0.6"
+  }
+}

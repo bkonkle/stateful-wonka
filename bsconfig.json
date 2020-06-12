@@ -1,0 +1,30 @@
+{
+  "name": "stateful-wonka",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "examples",
+      "subdirs": true
+    }
+  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": ["wonka"],
+  "bsc-flags": ["-bs-super-errors"],
+  "warnings": {
+    "error": "+5"
+  },
+  "namespace": true,
+  "refmt": 3,
+  "gentypeconfig": {
+    "language": "typescript",
+    "module": "es6",
+    "shims": {}
+  }
+}
