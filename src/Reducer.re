@@ -24,6 +24,10 @@ let reduce =
     |> scan(reducer, initialState)
   );
 
+/***
+ * Synchronous actions
+ */
+
 [@genType]
 let toAction = action => Do(action);
 
@@ -35,6 +39,10 @@ let toActions = actions => actions |> Js.Array.map(toAction);
 
 [@genType]
 let makeActions = actions => actions |> toActions |> fromArray;
+
+/***
+ * Async actions (based on Wonka sources)
+ */
 
 [@genType]
 let toAsyncAction = source => Await(source);
@@ -48,6 +56,10 @@ let toAsyncActions = sources => sources |> Js.Array.map(toAsyncAction);
 [@genType]
 let makeAsyncActions = sources => sources |> toAsyncActions |> fromArray;
 
+/***
+ * Promised actions
+ */
+
 [@genType]
 let toPromiseAction = promise => Await(promise |> fromPromise);
 
@@ -59,6 +71,3 @@ let toPromiseActions = promises => promises |> Js.Array.map(toPromiseAction);
 
 [@genType]
 let makePromiseActions = promises => promises |> toPromiseActions |> fromArray;
-
-[@genType]
-let default = reduce;

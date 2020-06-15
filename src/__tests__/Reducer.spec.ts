@@ -1,4 +1,4 @@
-import {toArray, toPromise, fromValue, pipe} from 'wonka'
+import {toArray, toPromise, fromValue, onPush, pipe} from 'wonka'
 
 import {
   reduce,
@@ -133,42 +133,56 @@ describe('Reducer', () => {
       expect(result).toEqual([{count: 2}, {count: 3}, {count: 4}])
     })
 
-    it('handles multiple async events', () => {
+    it('handles multiple async events', async () => {
       const state = {count: 1}
       const action = {type: Actions.Double}
 
       const dispatch = reduce(reducer, state)
 
-      const result = pipe(
+      const mock = jest.fn()
+
+      await pipe(
         makeAsyncActions([
           fromValue(action),
           fromValue(action),
           fromValue(action),
         ]),
         dispatch,
-        toArray
+        onPush(mock),
+        toPromise
       )
 
-      expect(result).toEqual([{count: 2}, {count: 4}, {count: 8}])
+      expect(mock).toHaveBeenNthCalledWith(1, {count: 2})
+      expect(mock).toHaveBeenNthCalledWith(2, {count: 4})
+      expect(mock).toHaveBeenNthCalledWith(3, {count: 8})
     })
 
     it('handles multiple promised events', async () => {
-      const state = {count: 1}
-      const action = {type: Actions.Square}
+      const state = {
+        count: 2,
+      }
+      const action = {
+        type: Actions.Square,
+      }
 
       const dispatch = reduce(reducer, state)
 
-      const result = pipe(
+      const mock = jest.fn()
+
+      await pipe(
         makePromiseActions([
           Promise.resolve(action),
           Promise.resolve(action),
           Promise.resolve(action),
         ]),
         dispatch,
-        toArray
+        onPush(mock),
+        toPromise
       )
 
-      expect(result).toEqual([{count: 2}, {count: 4}, {count: 8}])
+      expect(mock).toHaveBeenNthCalledWith(1, {count: 4})
+      expect(mock).toHaveBeenNthCalledWith(2, {count: 16})
+      expect(mock).toHaveBeenNthCalledWith(3, {count: 256})
     })
   })
 })
