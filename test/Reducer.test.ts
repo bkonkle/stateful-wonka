@@ -8,52 +8,9 @@ import {
   makeActions,
   makeAsyncActions,
   makePromiseActions,
-} from '../Reducer.gen'
+} from '../src/Reducer.gen'
 
 describe('Reducer', () => {
-  const identity = <State>(state: State) => state
-
-  describe('makeAction()', () => {
-    it('creates a synchronous action', () => {
-      const action = {type: 'TEST'}
-      const dispatch = reduce(identity, action)
-
-      const [result] = pipe(makeAction(action), dispatch, toArray)
-
-      expect(result).toEqual(action)
-    })
-  })
-
-  describe('makeAsyncAction()', () => {
-    it('creates an async action from a Wonka source', async () => {
-      const action = {type: 'TEST'}
-      const dispatch = reduce(identity, action)
-
-      const result = await pipe(
-        makeAsyncAction(fromValue(action)),
-        dispatch,
-        toPromise
-      )
-
-      expect(result).toEqual(action)
-    })
-  })
-
-  describe('makePromiseAction()', () => {
-    it('creates an async action from a Promise', async () => {
-      const action = {type: 'TEST'}
-      const dispatch = reduce(identity, action)
-
-      const result = await pipe(
-        makePromiseAction(Promise.resolve(action)),
-        dispatch,
-        toPromise
-      )
-
-      expect(result).toEqual(action)
-    })
-  })
-
   describe('reduce()', () => {
     enum Actions {
       Increment = 'Increment',

@@ -8,6 +8,10 @@
     {
       "dir": "examples",
       "subdirs": true
+    },
+    {
+      "dir": "test",
+      "type": "dev"
     }
   ],
   "package-specs": {
@@ -16,6 +20,7 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": ["wonka"],
+  "bs-dev-dependencies": ["@glennsl/bs-jest"],
   "bsc-flags": ["-bs-super-errors"],
   "warnings": {
     "error": "+5"
