@@ -29,10 +29,10 @@ yarn install stateful-wonka
 
 To use with Reason/OCaml with BuckleScript, add it to your `bsconfig.json`:
 
-```json
+```js
 {
   // ...
-  "bs-dependencies": ["wonka", "stateful-wonka"]
+  "bs-dependencies": ["wonka", "stateful-wonka"],
   // ...
 }
 ```
@@ -86,9 +86,8 @@ The dispatcher is a Wonka [Operator](https://wonka.kitten.sh/api/operators), and
 open StatefulWonka.Reducer;
 open Wonka;
 
-makeAsyncAction(getItemFromApi)
+makeAsyncAction(source => source |> getItemFromApi |> map(addItemToItems))
 |> dispatch
-|> map(addItemToItems)
 |> toPromise;
 ```
 
@@ -145,9 +144,8 @@ The dispatcher is a Wonka [Operator](https://wonka.kitten.sh/api/operators), and
 
 ```ts
 await pipe(
-  makePromiseAction(getItemFromApi),
+  makePromiseAction(getItemFromApi.then(addItemToItems)),
   dispatch,
-  map(addItemToItems),
   toPromise
 )
 ```
